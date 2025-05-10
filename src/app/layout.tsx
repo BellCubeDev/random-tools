@@ -1,0 +1,183 @@
+import { Metadata, Viewport } from 'next';
+import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
+import './global.scss';
+
+import { config as FontAwesomeConfig } from '@fortawesome/fontawesome-svg-core';
+import '@fortawesome/fontawesome-svg-core/styles.css';
+FontAwesomeConfig.autoAddCss = false;
+
+import { Roboto } from 'next/font/google';
+import { SourceCodePro } from './SourceCodePro';
+import Image from 'next/image';
+import { ProgressBar } from './ProgressBar';
+import { Markdown } from './components/markdown/Markdown';
+import { NavBar } from './components/nav-bar/NavBar';
+import { MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
+
+
+const roboto = Roboto({
+    display: 'block',
+    weight: ['400', '500', '700'],
+    subsets: ['latin-ext'],
+    variable: '--font',
+});
+
+// Exported directly in page.js as well to avoid a strange bugs or two
+export const metadata: Metadata = {
+    title: {
+        template: "%s | Bell's Random Tools",
+        default: "~~ERROR~~ | Bell's Random Tools",
+    },
+    description: "Random tools made by BellCube",
+    applicationName: "Bell's Random Tools",
+    authors: [{
+        name: "BellCube",
+        url: "https://bellcube.dev",
+    }],
+    category: "Tool",
+    classification: "Development",
+    formatDetection: {
+        address: false,
+        date: false,
+        email: false,
+        telephone: false,
+        url: false,
+    },
+    icons: undefined, // TODO: Create icon
+    keywords: [
+
+    ],
+    metadataBase: new URL('https://random.bellcube.dev'),
+    openGraph: {
+        type: 'website',
+        siteName: 'Bell\'s Random Tools',
+        url: 'https://random.bellcube.dev',
+        images: undefined, // TODO: Create icon
+        determiner: 'the',
+        locale: 'en',
+    },
+    twitter: {
+        card: 'summary',
+    },
+
+    generator: 'Next.js',
+
+    referrer: 'strict-origin',
+    other: {
+        'opener': 'noopener',
+        'darkreader-lock': 'true',
+    },
+
+
+
+};
+
+export const viewport: Viewport = {
+    colorScheme: 'dark',
+    width: 'device-width',
+    height: 'device-height',
+    initialScale: 1,
+    interactiveWidget: 'overlays-content',
+    viewportFit: 'cover',
+};
+
+export default function RootLayout({ children }: { readonly children: React.ReactNode }) {
+    return <html lang='en' suppressHydrationWarning>
+        <head>
+            {/* eslint-disable-next-line react/no-danger -- we're using JSON.stringify to set a <script> tag's contents; it's fine */}
+            <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify({
+                "@context": "http://schema.org",
+                "@type": "SoftwareApplication",
+                name: metadata.applicationName,
+                image: "https://random.bellcube.dev/logo/logo.webp",
+                url: "https://random.bellcube.dev/",
+                author: {
+                    "@type": "Person",
+                    name: "BellCube",
+                    givenName: "Zack",
+                },
+                applicationCategory: "BrowserApplication",
+                applicationSubCategory: "WebApp",
+                dateModified: new Date().toISOString(),
+                isAccessibleForFree: true,
+                license: 'MIT',
+                maintainer: {
+                    "@type": "Person",
+                    name: "BellCube",
+                    givenName: "Zack",
+                },
+                offers: {
+                    "@type": "Offer",
+                    price: 0,
+                    priceCurrency: "USD",
+                },
+                aggregateRating: {
+                    "@type": "AggregateRating",
+                    ratingValue: 5,
+                    reviewCount: 0,
+                },
+                operatingSystem: "Windows, Mac, Linux"//, Android, iOS",
+            }) }} />
+
+
+
+            <noscript><style>
+                {`
+
+                    .js-only { display: none }
+                    noscript { display: contents }
+                    * { transition: none !important; }
+                `.split('\n').map(l=>l.trim()).join(' ').trim()}
+            </style></noscript>
+
+
+
+        </head>
+        <body className={`${roboto.className} ${roboto.variable} ${SourceCodePro.variable}`} suppressHydrationWarning>
+            <ProgressBar />
+            <MantineProvider defaultColorScheme='dark' theme={{
+                defaultRadius: 'sm',
+            }}>
+                <Notifications />
+                <NavBar />
+                <main>
+                    {children}
+                </main>
+                <div>
+                    <footer>
+                        <div>
+                            Bell&rsquo;s Random Tools™
+                        </div>
+                        <div>
+                            <p>
+                                &copy; {new Date().getUTCFullYear()} BellCube. Source code <a href="https://github.com/BellCubeDev/bell-random-tools">available on GitHub</a>.
+                            </p>
+                            <p>
+                                Website code <a href="https://github.com/BellCubeDev/bell-random-tools/blob/development/LICENSE.md">available for free under the MIT license</a>.
+                            </p>
+                            <Markdown md={process.env.NEXT_PUBLIC_BUILD_SOURCE_MD || ''} />
+                        </div>
+                        <div>
+                            <a href='https://bellcube.dev' data-no-link-style target="_blank" rel="noopener noreferrer">
+                                <Image alt='BellCube Logo'
+                                    src='/logo/logo.webp'
+                                    width={96} height={96}
+                                    loading='lazy'
+                                />
+                            </a>
+                        </div>
+                    </footer>
+                </div>
+            </MantineProvider>
+        </body>
+    </html>;
+}
+
+
+// test function to see if type checking reaaaaally works
+///* export */ function _alberto(): 'alberto' & { readonly alberto: 'alberto' } {
+//    console.log('you know I will return alberto');
+//    return 'alberto' as const;
+//}

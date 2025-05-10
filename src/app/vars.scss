@@ -1,0 +1,25 @@
+@use "sass:string";
+$theme-hue: 205deg;
+
+@function css-function( $function, $values... ) {
+	@return
+		$function
+		+ string.unquote( '(' )
+		+ $values
+		+ string.unquote( ')' )
+	;
+}
+
+@function css-min( $values... ) {
+	@return css-function( min, $values );
+}
+
+@function css-max( $values... ) {
+	@return css-function( max, $values );
+}
+
+@function css-clamp( $values... ) {
+	@return css-function( clamp, $values );
+}
+
+$codeBG: #5f5f5f52;

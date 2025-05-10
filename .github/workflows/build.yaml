@@ -1,0 +1,82 @@
+name: Build Next.js App
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - production
+    paths:
+      - .github/workflows/build.yaml
+      - src/**
+      - public/**
+      - pnpm-lock.yaml
+      - .npmrc
+      - '*.js' # only applied to top-level files, don't worry
+      - '*.mjs'
+      - '*.ts'
+      - '*.json'
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build
+    env:
+      NEXT_PUBLIC_BUILD_SOURCE_MD: '___ ERROR DURING BUILD ___'
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4 # uses version in package.json
+
+      - name: Set Up Node.js v22 & Use NPM Package Caching
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install NPM Dependencies
+        id: install-deps
+        run: pnpm install --frozen-lockfile
+
+      - name: Use Next.js Caching
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('src/**/*.js', 'src/**/*.jsx', 'src/**/*.ts', 'src/**/*.tsx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
+
+      - name: Generate Build Markdown
+        id: build-source-md
+        run: |
+          date=$(node -e "console.log(new Date().toLocaleDateString('en-US', { dateStyle: 'full' }))")
+          actionsRunUrl='${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          echo "NEXT_PUBLIC_BUILD_SOURCE_MD=Last built on $date via [GitHub Actions - ${{github.workflow}} #${{ github.run_number }}]($actionsRunUrl)" >> $GITHUB_ENV
+
+      - name: Run Build Script
+        run: pnpm run build
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    name: Deploy to GitHub Pages
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages
