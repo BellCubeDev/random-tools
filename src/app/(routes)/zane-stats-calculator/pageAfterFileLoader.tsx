@@ -91,9 +91,11 @@ export function ZaneStatsCalculatorAfterLoader({loadedSheet, startNewCharacter, 
 
     const startLevelUp = useCallback(() => {
         gainZaneStatSheetLevel(nextStatSheetRef.current, classTierRef.current);
+        queueMicrotask(() => {
         startTransition(() => {
             growZaneStatSheetStats(nextStatSheetRef.current, classTierRef.current);
             addZaneStatSheetPoints(nextStatSheetRef.current, classTierRef.current);
+        });
         });
         setLevelUpStep(LevelUpStep.POINT_ALLOCATION);
     }, [classTierRef, nextStatSheetRef]);
