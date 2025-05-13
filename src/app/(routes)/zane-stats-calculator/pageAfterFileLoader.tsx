@@ -92,10 +92,10 @@ export function ZaneStatsCalculatorAfterLoader({loadedSheet, startNewCharacter, 
     const startLevelUp = useCallback(() => {
         gainZaneStatSheetLevel(nextStatSheetRef.current, classTierRef.current);
         queueMicrotask(() => {
-        startTransition(() => {
-            growZaneStatSheetStats(nextStatSheetRef.current, classTierRef.current);
-            addZaneStatSheetPoints(nextStatSheetRef.current, classTierRef.current);
-        });
+            startTransition(() => {
+                growZaneStatSheetStats(nextStatSheetRef.current, classTierRef.current);
+                addZaneStatSheetPoints(nextStatSheetRef.current, classTierRef.current);
+            });
         });
         setLevelUpStep(LevelUpStep.POINT_ALLOCATION);
     }, [classTierRef, nextStatSheetRef]);
@@ -288,9 +288,9 @@ export function ZaneStatsCalculatorAfterLoader({loadedSheet, startNewCharacter, 
 
                 </Fieldset>
             </Stack>
-            {/*<Stack gap='lg' style={{flexGrow: 0.1}}>
+            <Stack gap='lg' style={{flexGrow: 0.1}}>
                 <ComputedStatZone hitPoints={nextStatSheet.hitPoints} manaPoints={nextStatSheet.manaPoints} />
-                <Fieldset legend="Point Auto-Assignment" disabled={levelUpStep === LevelUpStep.POINT_ALLOCATION}>
+                {/*<Fieldset legend="Point Auto-Assignment" disabled={levelUpStep === LevelUpStep.POINT_ALLOCATION}>
                     <Stack gap="sm" align='center' justify='center'>
                         <Text size='sm'
                             ta="center" style={{maxWidth: '25em'}}
@@ -308,8 +308,8 @@ export function ZaneStatsCalculatorAfterLoader({loadedSheet, startNewCharacter, 
                         />)}
                     </Stack>
                     <Space h='lg' />
-                </Fieldset>
-            </Stack>*/}
+                </Fieldset>*/}
+            </Stack>
         </Flex>
 
     </>;
