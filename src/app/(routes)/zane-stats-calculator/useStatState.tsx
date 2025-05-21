@@ -111,6 +111,7 @@ export function useStatState(initial: ZaneStatSheet) {
     const [statStrengthRecentlyGrownPoints, setStatStrengthRecentlyGrownPoints] = useState<number>(0);
     const [statStrengthPointsToAutoAssign, setStatStrengthPointsToAutoAssign] = useState<number>(initial.stats.strength.pointsToAutoAssign);
     const [statStrengthCountGrownPointsTowardAutoAssign, setStatStrengthCountGrownPointsTowardAutoAssign] = useState<boolean>(initial.stats.strength.countGrownPointsTowardAutoAssign);
+    const [statStrengthBypassStatCaps, setStatStrengthBypassStatCaps] = useState(initial.stats.strength.bypassStatCaps ?? false);
     const {valueNow: statStrengthPointsNow, valueNext: statStrengthPointsNext, cancel: cancelStatStrengthPoints, setValueNext: setStatStrengthPointsNext, confirm: confirmStatStrengthPoints} = useConfirmState<number>(initial.stats.strength.points);
     const {valueNow: statStrengthGrowthPercentNow, valueNext: statStrengthGrowthPercentNext, cancel: cancelStatStrengthGrowthPercent, setValueNext: setStatStrengthGrowthPercentNext, confirm: confirmStatStrengthGrowthPercent} = useConfirmState<number>(initial.stats.strength.growthPercentagePoints);
     const {valueNow: statStrengthTotalGrownNow, valueNext: statStrengthTotalGrownNext, cancel: cancelStatStrengthTotalGrown, setValueNext: setStatStrengthTotalGrownNext, confirm: confirmStatStrengthTotalGrown} = useConfirmState<number>(initial.stats.strength.totalGrownPoints);
@@ -121,7 +122,8 @@ export function useStatState(initial: ZaneStatSheet) {
         totalGrownPoints: statStrengthTotalGrownNow,
         pointsToAutoAssign: statStrengthPointsToAutoAssign,
         countGrownPointsTowardAutoAssign: statStrengthCountGrownPointsTowardAutoAssign,
-    }), [statStrengthPointsNow, statStrengthGrowthPercentNow, statStrengthTotalGrownNow, statStrengthPointsToAutoAssign, statStrengthCountGrownPointsTowardAutoAssign]);
+        bypassStatCaps: statStrengthBypassStatCaps,
+    }), [statStrengthPointsNow, statStrengthGrowthPercentNow, statStrengthTotalGrownNow, statStrengthPointsToAutoAssign, statStrengthCountGrownPointsTowardAutoAssign, statStrengthBypassStatCaps]);
     const statStrengthNext = useMemo(() => ({
         type: ZaneStatType.STRENGTH as const,
         setPointsNext: setStatStrengthPointsNext,
@@ -136,7 +138,9 @@ export function useStatState(initial: ZaneStatSheet) {
         recentlyGrownPoints: statStrengthRecentlyGrownPoints,
         pointsToAutoAssign: statStrengthPointsToAutoAssign,
         countGrownPointsTowardAutoAssign: statStrengthCountGrownPointsTowardAutoAssign,
-    }), [setStatStrengthPointsNext, setStatStrengthGrowthPercentNext, setStatStrengthTotalGrownNext, statStrengthPointsNext, statStrengthGrowthPercentNext, statStrengthTotalGrownNext, statStrengthRecentlyGrownPoints, statStrengthPointsToAutoAssign, statStrengthCountGrownPointsTowardAutoAssign]);
+        bypassStatCaps: statStrengthBypassStatCaps,
+        setBypassStatCaps: setStatStrengthBypassStatCaps,
+    }), [setStatStrengthPointsNext, setStatStrengthGrowthPercentNext, setStatStrengthTotalGrownNext, statStrengthPointsNext, statStrengthGrowthPercentNext, statStrengthTotalGrownNext, statStrengthRecentlyGrownPoints, statStrengthPointsToAutoAssign, statStrengthCountGrownPointsTowardAutoAssign, statStrengthBypassStatCaps]);
     const confirmStatStrength = useCallback(() => {
         confirmStatStrengthPoints();
         confirmStatStrengthGrowthPercent();
@@ -149,9 +153,11 @@ export function useStatState(initial: ZaneStatSheet) {
         cancelStatStrengthTotalGrown();
         setStatStrengthRecentlyGrownPoints(0);
     }, [cancelStatStrengthPoints, cancelStatStrengthGrowthPercent, cancelStatStrengthTotalGrown]);
+
     const [statMagicRecentlyGrownPoints, setStatMagicRecentlyGrownPoints] = useState<number>(0);
     const [statMagicPointsToAutoAssign, setStatMagicPointsToAutoAssign] = useState<number>(initial.stats.magic.pointsToAutoAssign);
     const [statMagicCountGrownPointsTowardAutoAssign, setStatMagicCountGrownPointsTowardAutoAssign] = useState<boolean>(initial.stats.magic.countGrownPointsTowardAutoAssign);
+    const [statMagicBypassStatCaps, setStatMagicBypassStatCaps] = useState(initial.stats.magic.bypassStatCaps ?? false);
     const {valueNow: statMagicPointsNow, valueNext: statMagicPointsNext, cancel: cancelStatMagicPoints, setValueNext: setStatMagicPointsNext, confirm: confirmStatMagicPoints} = useConfirmState<number>(initial.stats.magic.points);
     const {valueNow: statMagicGrowthPercentNow, valueNext: statMagicGrowthPercentNext, cancel: cancelStatMagicGrowthPercent, setValueNext: setStatMagicGrowthPercentNext, confirm: confirmStatMagicGrowthPercent} = useConfirmState<number>(initial.stats.magic.growthPercentagePoints);
     const {valueNow: statMagicTotalGrownNow, valueNext: statMagicTotalGrownNext, cancel: cancelStatMagicTotalGrown, setValueNext: setStatMagicTotalGrownNext, confirm: confirmStatMagicTotalGrown} = useConfirmState<number>(initial.stats.magic.totalGrownPoints);
@@ -162,7 +168,8 @@ export function useStatState(initial: ZaneStatSheet) {
         totalGrownPoints: statMagicTotalGrownNow,
         pointsToAutoAssign: statMagicPointsToAutoAssign,
         countGrownPointsTowardAutoAssign: statMagicCountGrownPointsTowardAutoAssign,
-    }), [statMagicPointsNow, statMagicGrowthPercentNow, statMagicTotalGrownNow, statMagicPointsToAutoAssign, statMagicCountGrownPointsTowardAutoAssign]);
+        bypassStatCaps: statMagicBypassStatCaps,
+    }), [statMagicPointsNow, statMagicGrowthPercentNow, statMagicTotalGrownNow, statMagicPointsToAutoAssign, statMagicCountGrownPointsTowardAutoAssign, statMagicBypassStatCaps]);
     const statMagicNext = useMemo(() => ({
         type: ZaneStatType.MAGIC as const,
         setPointsNext: setStatMagicPointsNext,
@@ -177,7 +184,9 @@ export function useStatState(initial: ZaneStatSheet) {
         recentlyGrownPoints: statMagicRecentlyGrownPoints,
         pointsToAutoAssign: statMagicPointsToAutoAssign,
         countGrownPointsTowardAutoAssign: statMagicCountGrownPointsTowardAutoAssign,
-    }), [setStatMagicPointsNext, setStatMagicGrowthPercentNext, setStatMagicTotalGrownNext, statMagicPointsNext, statMagicGrowthPercentNext, statMagicTotalGrownNext, statMagicRecentlyGrownPoints, statMagicPointsToAutoAssign, statMagicCountGrownPointsTowardAutoAssign]);
+        bypassStatCaps: statMagicBypassStatCaps,
+        setBypassStatCaps: setStatMagicBypassStatCaps,
+    }), [setStatMagicPointsNext, setStatMagicGrowthPercentNext, setStatMagicTotalGrownNext, statMagicPointsNext, statMagicGrowthPercentNext, statMagicTotalGrownNext, statMagicRecentlyGrownPoints, statMagicPointsToAutoAssign, statMagicCountGrownPointsTowardAutoAssign, statMagicBypassStatCaps]);
     const confirmStatMagic = useCallback(() => {
         confirmStatMagicPoints();
         confirmStatMagicGrowthPercent();
@@ -194,6 +203,7 @@ export function useStatState(initial: ZaneStatSheet) {
     const [statSkillRecentlyGrownPoints, setStatSkillRecentlyGrownPoints] = useState<number>(0);
     const [statSkillPointsToAutoAssign, setStatSkillPointsToAutoAssign] = useState<number>(initial.stats.skill.pointsToAutoAssign);
     const [statSkillCountGrownPointsTowardAutoAssign, setStatSkillCountGrownPointsTowardAutoAssign] = useState<boolean>(initial.stats.skill.countGrownPointsTowardAutoAssign);
+    const [statSkillBypassStatCaps, setStatSkillBypassStatCaps] = useState(initial.stats.skill.bypassStatCaps ?? false);
     const {valueNow: statSkillPointsNow, valueNext: statSkillPointsNext, cancel: cancelStatSkillPoints, setValueNext: setStatSkillPointsNext, confirm: confirmStatSkillPoints} = useConfirmState<number>(initial.stats.skill.points);
     const {valueNow: statSkillGrowthPercentNow, valueNext: statSkillGrowthPercentNext, cancel: cancelStatSkillGrowthPercent, setValueNext: setStatSkillGrowthPercentNext, confirm: confirmStatSkillGrowthPercent} = useConfirmState<number>(initial.stats.skill.growthPercentagePoints);
     const {valueNow: statSkillTotalGrownNow, valueNext: statSkillTotalGrownNext, cancel: cancelStatSkillTotalGrown, setValueNext: setStatSkillTotalGrownNext, confirm: confirmStatSkillTotalGrown} = useConfirmState<number>(initial.stats.skill.totalGrownPoints);
@@ -204,7 +214,8 @@ export function useStatState(initial: ZaneStatSheet) {
         totalGrownPoints: statSkillTotalGrownNow,
         pointsToAutoAssign: statSkillPointsToAutoAssign,
         countGrownPointsTowardAutoAssign: statSkillCountGrownPointsTowardAutoAssign,
-    }), [statSkillPointsNow, statSkillGrowthPercentNow, statSkillTotalGrownNow, statSkillPointsToAutoAssign, statSkillCountGrownPointsTowardAutoAssign]);
+        bypassStatCaps: statSkillBypassStatCaps,
+    }), [statSkillPointsNow, statSkillGrowthPercentNow, statSkillTotalGrownNow, statSkillPointsToAutoAssign, statSkillCountGrownPointsTowardAutoAssign, statSkillBypassStatCaps]);
     const statSkillNext = useMemo(() => ({
         type: ZaneStatType.SKILL as const,
         setPointsNext: setStatSkillPointsNext,
@@ -219,7 +230,9 @@ export function useStatState(initial: ZaneStatSheet) {
         recentlyGrownPoints: statSkillRecentlyGrownPoints,
         pointsToAutoAssign: statSkillPointsToAutoAssign,
         countGrownPointsTowardAutoAssign: statSkillCountGrownPointsTowardAutoAssign,
-    }), [setStatSkillPointsNext, setStatSkillGrowthPercentNext, setStatSkillTotalGrownNext, statSkillPointsNext, statSkillGrowthPercentNext, statSkillTotalGrownNext, statSkillRecentlyGrownPoints, statSkillPointsToAutoAssign, statSkillCountGrownPointsTowardAutoAssign]);
+        bypassStatCaps: statSkillBypassStatCaps,
+        setBypassStatCaps: setStatSkillBypassStatCaps,
+    }), [setStatSkillPointsNext, setStatSkillGrowthPercentNext, setStatSkillTotalGrownNext, statSkillPointsNext, statSkillGrowthPercentNext, statSkillTotalGrownNext, statSkillRecentlyGrownPoints, statSkillPointsToAutoAssign, statSkillCountGrownPointsTowardAutoAssign, statSkillBypassStatCaps]);
     const confirmStatSkill = useCallback(() => {
         confirmStatSkillPoints();
         confirmStatSkillGrowthPercent();
@@ -236,6 +249,7 @@ export function useStatState(initial: ZaneStatSheet) {
     const [statSpeedRecentlyGrownPoints, setStatSpeedRecentlyGrownPoints] = useState<number>(0);
     const [statSpeedPointsToAutoAssign, setStatSpeedPointsToAutoAssign] = useState<number>(initial.stats.speed.pointsToAutoAssign);
     const [statSpeedCountGrownPointsTowardAutoAssign, setStatSpeedCountGrownPointsTowardAutoAssign] = useState<boolean>(initial.stats.speed.countGrownPointsTowardAutoAssign);
+    const [statSpeedBypassStatCaps, setStatSpeedBypassStatCaps] = useState(initial.stats.speed.bypassStatCaps ?? false);
     const {valueNow: statSpeedPointsNow, valueNext: statSpeedPointsNext, cancel: cancelStatSpeedPoints, setValueNext: setStatSpeedPointsNext, confirm: confirmStatSpeedPoints} = useConfirmState<number>(initial.stats.speed.points);
     const {valueNow: statSpeedGrowthPercentNow, valueNext: statSpeedGrowthPercentNext, cancel: cancelStatSpeedGrowthPercent, setValueNext: setStatSpeedGrowthPercentNext, confirm: confirmStatSpeedGrowthPercent} = useConfirmState<number>(initial.stats.speed.growthPercentagePoints);
     const {valueNow: statSpeedTotalGrownNow, valueNext: statSpeedTotalGrownNext, cancel: cancelStatSpeedTotalGrown, setValueNext: setStatSpeedTotalGrownNext, confirm: confirmStatSpeedTotalGrown} = useConfirmState<number>(initial.stats.speed.totalGrownPoints);
@@ -246,7 +260,8 @@ export function useStatState(initial: ZaneStatSheet) {
         totalGrownPoints: statSpeedTotalGrownNow,
         pointsToAutoAssign: statSpeedPointsToAutoAssign,
         countGrownPointsTowardAutoAssign: statSpeedCountGrownPointsTowardAutoAssign,
-    }), [statSpeedPointsNow, statSpeedGrowthPercentNow, statSpeedTotalGrownNow, statSpeedPointsToAutoAssign, statSpeedCountGrownPointsTowardAutoAssign]);
+        bypassStatCaps: statSpeedBypassStatCaps,
+    }), [statSpeedPointsNow, statSpeedGrowthPercentNow, statSpeedTotalGrownNow, statSpeedPointsToAutoAssign, statSpeedCountGrownPointsTowardAutoAssign, statSpeedBypassStatCaps]);
     const statSpeedNext = useMemo(() => ({
         type: ZaneStatType.SPEED as const,
         setPointsNext: setStatSpeedPointsNext,
@@ -261,7 +276,9 @@ export function useStatState(initial: ZaneStatSheet) {
         recentlyGrownPoints: statSpeedRecentlyGrownPoints,
         pointsToAutoAssign: statSpeedPointsToAutoAssign,
         countGrownPointsTowardAutoAssign: statSpeedCountGrownPointsTowardAutoAssign,
-    }), [setStatSpeedPointsNext, setStatSpeedGrowthPercentNext, setStatSpeedTotalGrownNext, statSpeedPointsNext, statSpeedGrowthPercentNext, statSpeedTotalGrownNext, statSpeedRecentlyGrownPoints, statSpeedPointsToAutoAssign, statSpeedCountGrownPointsTowardAutoAssign]);
+        bypassStatCaps: statSpeedBypassStatCaps,
+        setBypassStatCaps: setStatSpeedBypassStatCaps,
+    }), [setStatSpeedPointsNext, setStatSpeedGrowthPercentNext, setStatSpeedTotalGrownNext, statSpeedPointsNext, statSpeedGrowthPercentNext, statSpeedTotalGrownNext, statSpeedRecentlyGrownPoints, statSpeedPointsToAutoAssign, statSpeedCountGrownPointsTowardAutoAssign, statSpeedBypassStatCaps]);
     const confirmStatSpeed = useCallback(() => {
         confirmStatSpeedPoints();
         confirmStatSpeedGrowthPercent();
@@ -278,6 +295,7 @@ export function useStatState(initial: ZaneStatSheet) {
     const [statLuckRecentlyGrownPoints, setStatLuckRecentlyGrownPoints] = useState<number>(0);
     const [statLuckPointsToAutoAssign, setStatLuckPointsToAutoAssign] = useState<number>(initial.stats.luck.pointsToAutoAssign);
     const [statLuckCountGrownPointsTowardAutoAssign, setStatLuckCountGrownPointsTowardAutoAssign] = useState<boolean>(initial.stats.luck.countGrownPointsTowardAutoAssign);
+    const [statLuckBypassStatCaps, setStatLuckBypassStatCaps] = useState(initial.stats.luck.bypassStatCaps ?? false);
     const {valueNow: statLuckPointsNow, valueNext: statLuckPointsNext, cancel: cancelStatLuckPoints, setValueNext: setStatLuckPointsNext, confirm: confirmStatLuckPoints} = useConfirmState<number>(initial.stats.luck.points);
     const {valueNow: statLuckGrowthPercentNow, valueNext: statLuckGrowthPercentNext, cancel: cancelStatLuckGrowthPercent, setValueNext: setStatLuckGrowthPercentNext, confirm: confirmStatLuckGrowthPercent} = useConfirmState<number>(initial.stats.luck.growthPercentagePoints);
     const {valueNow: statLuckTotalGrownNow, valueNext: statLuckTotalGrownNext, cancel: cancelStatLuckTotalGrown, setValueNext: setStatLuckTotalGrownNext, confirm: confirmStatLuckTotalGrown} = useConfirmState<number>(initial.stats.luck.totalGrownPoints);
@@ -288,7 +306,8 @@ export function useStatState(initial: ZaneStatSheet) {
         totalGrownPoints: statLuckTotalGrownNow,
         pointsToAutoAssign: statLuckPointsToAutoAssign,
         countGrownPointsTowardAutoAssign: statLuckCountGrownPointsTowardAutoAssign,
-    }), [statLuckPointsNow, statLuckGrowthPercentNow, statLuckTotalGrownNow, statLuckPointsToAutoAssign, statLuckCountGrownPointsTowardAutoAssign]);
+        bypassStatCaps: statLuckBypassStatCaps,
+    }), [statLuckPointsNow, statLuckGrowthPercentNow, statLuckTotalGrownNow, statLuckPointsToAutoAssign, statLuckCountGrownPointsTowardAutoAssign, statLuckBypassStatCaps]);
     const statLuckNext = useMemo(() => ({
         type: ZaneStatType.LUCK as const,
         setPointsNext: setStatLuckPointsNext,
@@ -303,7 +322,9 @@ export function useStatState(initial: ZaneStatSheet) {
         recentlyGrownPoints: statLuckRecentlyGrownPoints,
         pointsToAutoAssign: statLuckPointsToAutoAssign,
         countGrownPointsTowardAutoAssign: statLuckCountGrownPointsTowardAutoAssign,
-    }), [setStatLuckPointsNext, setStatLuckGrowthPercentNext, setStatLuckTotalGrownNext, statLuckPointsNext, statLuckGrowthPercentNext, statLuckTotalGrownNext, statLuckRecentlyGrownPoints, statLuckPointsToAutoAssign, statLuckCountGrownPointsTowardAutoAssign]);
+        bypassStatCaps: statLuckBypassStatCaps,
+        setBypassStatCaps: setStatLuckBypassStatCaps,
+    }), [setStatLuckPointsNext, setStatLuckGrowthPercentNext, setStatLuckTotalGrownNext, statLuckPointsNext, statLuckGrowthPercentNext, statLuckTotalGrownNext, statLuckRecentlyGrownPoints, statLuckPointsToAutoAssign, statLuckCountGrownPointsTowardAutoAssign, statLuckBypassStatCaps]);
     const confirmStatLuck = useCallback(() => {
         confirmStatLuckPoints();
         confirmStatLuckGrowthPercent();
@@ -320,6 +341,7 @@ export function useStatState(initial: ZaneStatSheet) {
     const [statDefenseRecentlyGrownPoints, setStatDefenseRecentlyGrownPoints] = useState<number>(0);
     const [statDefensePointsToAutoAssign, setStatDefensePointsToAutoAssign] = useState<number>(initial.stats.defense.pointsToAutoAssign);
     const [statDefenseCountGrownPointsTowardAutoAssign, setStatDefenseCountGrownPointsTowardAutoAssign] = useState<boolean>(initial.stats.defense.countGrownPointsTowardAutoAssign);
+    const [statDefenseBypassStatCaps, setStatDefenseBypassStatCaps] = useState(initial.stats.defense.bypassStatCaps ?? false);
     const {valueNow: statDefensePointsNow, valueNext: statDefensePointsNext, cancel: cancelStatDefensePoints, setValueNext: setStatDefensePointsNext, confirm: confirmStatDefensePoints} = useConfirmState<number>(initial.stats.defense.points);
     const {valueNow: statDefenseGrowthPercentNow, valueNext: statDefenseGrowthPercentNext, cancel: cancelStatDefenseGrowthPercent, setValueNext: setStatDefenseGrowthPercentNext, confirm: confirmStatDefenseGrowthPercent} = useConfirmState<number>(initial.stats.defense.growthPercentagePoints);
     const {valueNow: statDefenseTotalGrownNow, valueNext: statDefenseTotalGrownNext, cancel: cancelStatDefenseTotalGrown, setValueNext: setStatDefenseTotalGrownNext, confirm: confirmStatDefenseTotalGrown} = useConfirmState<number>(initial.stats.defense.totalGrownPoints);
@@ -330,7 +352,8 @@ export function useStatState(initial: ZaneStatSheet) {
         totalGrownPoints: statDefenseTotalGrownNow,
         pointsToAutoAssign: statDefensePointsToAutoAssign,
         countGrownPointsTowardAutoAssign: statDefenseCountGrownPointsTowardAutoAssign,
-    }), [statDefensePointsNow, statDefenseGrowthPercentNow, statDefenseTotalGrownNow, statDefensePointsToAutoAssign, statDefenseCountGrownPointsTowardAutoAssign]);
+        bypassStatCaps: statDefenseBypassStatCaps,
+    }), [statDefensePointsNow, statDefenseGrowthPercentNow, statDefenseTotalGrownNow, statDefensePointsToAutoAssign, statDefenseCountGrownPointsTowardAutoAssign, statDefenseBypassStatCaps]);
     const statDefenseNext = useMemo(() => ({
         type: ZaneStatType.DEFENSE as const,
         setPointsNext: setStatDefensePointsNext,
@@ -345,7 +368,9 @@ export function useStatState(initial: ZaneStatSheet) {
         recentlyGrownPoints: statDefenseRecentlyGrownPoints,
         pointsToAutoAssign: statDefensePointsToAutoAssign,
         countGrownPointsTowardAutoAssign: statDefenseCountGrownPointsTowardAutoAssign,
-    }), [setStatDefensePointsNext, setStatDefenseGrowthPercentNext, setStatDefenseTotalGrownNext, statDefensePointsNext, statDefenseGrowthPercentNext, statDefenseTotalGrownNext, statDefenseRecentlyGrownPoints, statDefensePointsToAutoAssign, statDefenseCountGrownPointsTowardAutoAssign]);
+        bypassStatCaps: statDefenseBypassStatCaps,
+        setBypassStatCaps: setStatDefenseBypassStatCaps,
+    }), [setStatDefensePointsNext, setStatDefenseGrowthPercentNext, setStatDefenseTotalGrownNext, statDefensePointsNext, statDefenseGrowthPercentNext, statDefenseTotalGrownNext, statDefenseRecentlyGrownPoints, statDefensePointsToAutoAssign, statDefenseCountGrownPointsTowardAutoAssign, statDefenseBypassStatCaps]);
     const confirmStatDefense = useCallback(() => {
         confirmStatDefensePoints();
         confirmStatDefenseGrowthPercent();
@@ -362,6 +387,7 @@ export function useStatState(initial: ZaneStatSheet) {
     const [statResistanceRecentlyGrownPoints, setStatResistanceRecentlyGrownPoints] = useState<number>(0);
     const [statResistancePointsToAutoAssign, setStatResistancePointsToAutoAssign] = useState<number>(initial.stats.resistance.pointsToAutoAssign);
     const [statResistanceCountGrownPointsTowardAutoAssign, setStatResistanceCountGrownPointsTowardAutoAssign] = useState<boolean>(initial.stats.resistance.countGrownPointsTowardAutoAssign);
+    const [statResistanceBypassStatCaps, setStatResistanceBypassStatCaps] = useState(initial.stats.resistance.bypassStatCaps ?? false);
     const {valueNow: statResistancePointsNow, valueNext: statResistancePointsNext, cancel: cancelStatResistancePoints, setValueNext: setStatResistancePointsNext, confirm: confirmStatResistancePoints} = useConfirmState<number>(initial.stats.resistance.points);
     const {valueNow: statResistanceGrowthPercentNow, valueNext: statResistanceGrowthPercentNext, cancel: cancelStatResistanceGrowthPercent, setValueNext: setStatResistanceGrowthPercentNext, confirm: confirmStatResistanceGrowthPercent} = useConfirmState<number>(initial.stats.resistance.growthPercentagePoints);
     const {valueNow: statResistanceTotalGrownNow, valueNext: statResistanceTotalGrownNext, cancel: cancelStatResistanceTotalGrown, setValueNext: setStatResistanceTotalGrownNext, confirm: confirmStatResistanceTotalGrown} = useConfirmState<number>(initial.stats.resistance.totalGrownPoints);
@@ -372,7 +398,8 @@ export function useStatState(initial: ZaneStatSheet) {
         totalGrownPoints: statResistanceTotalGrownNow,
         pointsToAutoAssign: statResistancePointsToAutoAssign,
         countGrownPointsTowardAutoAssign: statResistanceCountGrownPointsTowardAutoAssign,
-    }), [statResistancePointsNow, statResistanceGrowthPercentNow, statResistanceTotalGrownNow, statResistancePointsToAutoAssign, statResistanceCountGrownPointsTowardAutoAssign]);
+        bypassStatCaps: statResistanceBypassStatCaps,
+    }), [statResistancePointsNow, statResistanceGrowthPercentNow, statResistanceTotalGrownNow, statResistancePointsToAutoAssign, statResistanceCountGrownPointsTowardAutoAssign, statResistanceBypassStatCaps]);
     const statResistanceNext = useMemo(() => ({
         type: ZaneStatType.RESISTANCE as const,
         setPointsNext: setStatResistancePointsNext,
@@ -387,7 +414,9 @@ export function useStatState(initial: ZaneStatSheet) {
         recentlyGrownPoints: statResistanceRecentlyGrownPoints,
         pointsToAutoAssign: statResistancePointsToAutoAssign,
         countGrownPointsTowardAutoAssign: statResistanceCountGrownPointsTowardAutoAssign,
-    }), [setStatResistancePointsNext, setStatResistanceGrowthPercentNext, setStatResistanceTotalGrownNext, statResistancePointsNext, statResistanceGrowthPercentNext, statResistanceTotalGrownNext, statResistanceRecentlyGrownPoints, statResistancePointsToAutoAssign, statResistanceCountGrownPointsTowardAutoAssign]);
+        bypassStatCaps: statResistanceBypassStatCaps,
+        setBypassStatCaps: setStatResistanceBypassStatCaps,
+    }), [setStatResistancePointsNext, setStatResistanceGrowthPercentNext, setStatResistanceTotalGrownNext, statResistancePointsNext, statResistanceGrowthPercentNext, statResistanceTotalGrownNext, statResistanceRecentlyGrownPoints, statResistancePointsToAutoAssign, statResistanceCountGrownPointsTowardAutoAssign, statResistanceBypassStatCaps]);
     const confirmStatResistance = useCallback(() => {
         confirmStatResistancePoints();
         confirmStatResistanceGrowthPercent();
@@ -404,6 +433,7 @@ export function useStatState(initial: ZaneStatSheet) {
     const [statMindRecentlyGrownPoints, setStatMindRecentlyGrownPoints] = useState<number>(0);
     const [statMindPointsToAutoAssign, setStatMindPointsToAutoAssign] = useState<number>(initial.stats.mind.pointsToAutoAssign);
     const [statMindCountGrownPointsTowardAutoAssign, setStatMindCountGrownPointsTowardAutoAssign] = useState<boolean>(initial.stats.mind.countGrownPointsTowardAutoAssign);
+    const [statMindBypassStatCaps, setStatMindBypassStatCaps] = useState(initial.stats.mind.bypassStatCaps ?? false);
     const {valueNow: statMindPointsNow, valueNext: statMindPointsNext, cancel: cancelStatMindPoints, setValueNext: setStatMindPointsNext, confirm: confirmStatMindPoints} = useConfirmState<number>(initial.stats.mind.points);
     const {valueNow: statMindGrowthPercentNow, valueNext: statMindGrowthPercentNext, cancel: cancelStatMindGrowthPercent, setValueNext: setStatMindGrowthPercentNext, confirm: confirmStatMindGrowthPercent} = useConfirmState<number>(initial.stats.mind.growthPercentagePoints);
     const {valueNow: statMindTotalGrownNow, valueNext: statMindTotalGrownNext, cancel: cancelStatMindTotalGrown, setValueNext: setStatMindTotalGrownNext, confirm: confirmStatMindTotalGrown} = useConfirmState<number>(initial.stats.mind.totalGrownPoints);
@@ -414,7 +444,8 @@ export function useStatState(initial: ZaneStatSheet) {
         totalGrownPoints: statMindTotalGrownNow,
         pointsToAutoAssign: statMindPointsToAutoAssign,
         countGrownPointsTowardAutoAssign: statMindCountGrownPointsTowardAutoAssign,
-    }), [statMindPointsNow, statMindGrowthPercentNow, statMindTotalGrownNow, statMindPointsToAutoAssign, statMindCountGrownPointsTowardAutoAssign]);
+        bypassStatCaps: statMindBypassStatCaps,
+    }), [statMindPointsNow, statMindGrowthPercentNow, statMindTotalGrownNow, statMindPointsToAutoAssign, statMindCountGrownPointsTowardAutoAssign, statMindBypassStatCaps]);
     const statMindNext = useMemo(() => ({
         type: ZaneStatType.MIND as const,
         setPointsNext: setStatMindPointsNext,
@@ -429,7 +460,9 @@ export function useStatState(initial: ZaneStatSheet) {
         recentlyGrownPoints: statMindRecentlyGrownPoints,
         pointsToAutoAssign: statMindPointsToAutoAssign,
         countGrownPointsTowardAutoAssign: statMindCountGrownPointsTowardAutoAssign,
-    }), [setStatMindPointsNext, setStatMindGrowthPercentNext, setStatMindTotalGrownNext, statMindPointsNext, statMindGrowthPercentNext, statMindTotalGrownNext, statMindRecentlyGrownPoints, statMindPointsToAutoAssign, statMindCountGrownPointsTowardAutoAssign]);
+        bypassStatCaps: statMindBypassStatCaps,
+        setBypassStatCaps: setStatMindBypassStatCaps,
+    }), [setStatMindPointsNext, setStatMindGrowthPercentNext, setStatMindTotalGrownNext, statMindPointsNext, statMindGrowthPercentNext, statMindTotalGrownNext, statMindRecentlyGrownPoints, statMindPointsToAutoAssign, statMindCountGrownPointsTowardAutoAssign, statMindBypassStatCaps]);
     const confirmStatMind = useCallback(() => {
         confirmStatMindPoints();
         confirmStatMindGrowthPercent();
@@ -446,6 +479,7 @@ export function useStatState(initial: ZaneStatSheet) {
     const [statVitalityRecentlyGrownPoints, setStatVitalityRecentlyGrownPoints] = useState<number>(0);
     const [statVitalityPointsToAutoAssign, setStatVitalityPointsToAutoAssign] = useState<number>(initial.stats.vitality.pointsToAutoAssign);
     const [statVitalityCountGrownPointsTowardAutoAssign, setStatVitalityCountGrownPointsTowardAutoAssign] = useState<boolean>(initial.stats.vitality.countGrownPointsTowardAutoAssign);
+    const [statVitalityBypassStatCaps, setStatVitalityBypassStatCaps] = useState(initial.stats.vitality.bypassStatCaps ?? false);
     const {valueNow: statVitalityPointsNow, valueNext: statVitalityPointsNext, cancel: cancelStatVitalityPoints, setValueNext: setStatVitalityPointsNext, confirm: confirmStatVitalityPoints} = useConfirmState<number>(initial.stats.vitality.points);
     const {valueNow: statVitalityGrowthPercentNow, valueNext: statVitalityGrowthPercentNext, cancel: cancelStatVitalityGrowthPercent, setValueNext: setStatVitalityGrowthPercentNext, confirm: confirmStatVitalityGrowthPercent} = useConfirmState<number>(initial.stats.vitality.growthPercentagePoints);
     const {valueNow: statVitalityTotalGrownNow, valueNext: statVitalityTotalGrownNext, cancel: cancelStatVitalityTotalGrown, setValueNext: setStatVitalityTotalGrownNext, confirm: confirmStatVitalityTotalGrown} = useConfirmState<number>(initial.stats.vitality.totalGrownPoints);
@@ -456,7 +490,8 @@ export function useStatState(initial: ZaneStatSheet) {
         totalGrownPoints: statVitalityTotalGrownNow,
         pointsToAutoAssign: statVitalityPointsToAutoAssign,
         countGrownPointsTowardAutoAssign: statVitalityCountGrownPointsTowardAutoAssign,
-    }), [statVitalityPointsNow, statVitalityGrowthPercentNow, statVitalityTotalGrownNow, statVitalityPointsToAutoAssign, statVitalityCountGrownPointsTowardAutoAssign]);
+        bypassStatCaps: statVitalityBypassStatCaps,
+    }), [statVitalityPointsNow, statVitalityGrowthPercentNow, statVitalityTotalGrownNow, statVitalityPointsToAutoAssign, statVitalityCountGrownPointsTowardAutoAssign, statVitalityBypassStatCaps]);
     const statVitalityNext = useMemo(() => ({
         type: ZaneStatType.VITALITY as const,
         setPointsNext: setStatVitalityPointsNext,
@@ -471,7 +506,9 @@ export function useStatState(initial: ZaneStatSheet) {
         recentlyGrownPoints: statVitalityRecentlyGrownPoints,
         pointsToAutoAssign: statVitalityPointsToAutoAssign,
         countGrownPointsTowardAutoAssign: statVitalityCountGrownPointsTowardAutoAssign,
-    }), [setStatVitalityPointsNext, setStatVitalityGrowthPercentNext, setStatVitalityTotalGrownNext, statVitalityPointsNext, statVitalityGrowthPercentNext, statVitalityTotalGrownNext, statVitalityRecentlyGrownPoints, statVitalityPointsToAutoAssign, statVitalityCountGrownPointsTowardAutoAssign]);
+        bypassStatCaps: statVitalityBypassStatCaps,
+        setBypassStatCaps: setStatVitalityBypassStatCaps,
+    }), [setStatVitalityPointsNext, setStatVitalityGrowthPercentNext, setStatVitalityTotalGrownNext, statVitalityPointsNext, statVitalityGrowthPercentNext, statVitalityTotalGrownNext, statVitalityRecentlyGrownPoints, statVitalityPointsToAutoAssign, statVitalityCountGrownPointsTowardAutoAssign, statVitalityBypassStatCaps]);
     const confirmStatVitality = useCallback(() => {
         confirmStatVitalityPoints();
         confirmStatVitalityGrowthPercent();
@@ -485,16 +522,20 @@ export function useStatState(initial: ZaneStatSheet) {
         setStatVitalityRecentlyGrownPoints(0);
     }, [cancelStatVitalityPoints, cancelStatVitalityGrowthPercent, cancelStatVitalityTotalGrown]);
 
+    const [statMovementBypassStatCaps, setStatMovementBypassStatCaps] = useState(initial.stats.movement.bypassStatCaps ?? false);
     const {valueNow: statMovementPointsNow, valueNext: statMovementPointsNext, cancel: cancelStatMovementPoints, setValueNext: setStatMovementPointsNext, confirm: confirmStatMovementPoints} = useConfirmState<number>(initial.stats.movement.points);
     const statMovementNow = useMemo(() => ({
         type: ZaneStatType.MOVEMENT as const,
         points: statMovementPointsNow,
-    }), [statMovementPointsNow]);
+        bypassStatCaps: statMovementBypassStatCaps,
+    }), [statMovementPointsNow, statMovementBypassStatCaps]);
     const statMovementNext = useMemo(() => ({
         type: ZaneStatType.MOVEMENT as const,
         setPointsNext: setStatMovementPointsNext,
         points: statMovementPointsNext,
-    }), [setStatMovementPointsNext, statMovementPointsNext]);
+        bypassStatCaps: statMovementBypassStatCaps,
+        setBypassStatCaps: setStatMovementBypassStatCaps,
+    }), [setStatMovementPointsNext, statMovementPointsNext, statMovementBypassStatCaps]);
     const confirmStatMovement = confirmStatMovementPoints;
     const cancelStatMovement = cancelStatMovementPoints;
 

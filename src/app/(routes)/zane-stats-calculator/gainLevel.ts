@@ -80,8 +80,11 @@ function growStat(
     stat: ZaneNextStatSheet['stats'][ZaneStatTypeGrowth],
     classTier: ZaneClassTier,
 ) {
-    const cap = getCapsForStat(stat, classTier);
-    if (stat.points >= cap.hard) return;
+
+    if (!stat.bypassStatCaps) {
+        const cap = getCapsForStat(stat, classTier);
+        if (stat.points >= cap.hard) return;
+    }
 
     const randomValue = Math.random();
     if (randomValue >= stat.growthPercentagePoints / 100) {

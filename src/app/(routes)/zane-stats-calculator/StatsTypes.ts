@@ -46,6 +46,8 @@ export const maxNewAssignPointsForStatInALevelPerClassTier = {
 const ZaneStatSchemaBase = z.object({
     /** Number of total points in the skill, accounting for both growth and manual assignment */
     points: z.int().min(0).default(0),
+    /** Whether to bypass any caps normally placed on this stat. If true, both growth and manual assignment will ignore stat caps. */
+    bypassStatCaps: z.boolean().optional().default(false),
 });
 
 const ZaneStatSchemaGrowing = ZaneStatSchemaBase.extend({
@@ -103,19 +105,19 @@ export type ZaneStatTypeGrowth = keyof {[K in ZaneStatType as typeof statObjects
 export const ZaneStatTypeGrowthValues = Object.keys(statObjectsByType).filter((key) => statObjectsByType[key as ZaneStatType] === ZaneStatSchemaGrowing) as ZaneStatTypeGrowth[];
 
 const ZaneStatSheetBasicClassSchema = z.object({
-    level: z.int().min(0).max(20).default(0),
+    level: z.int().min(0).default(0),
     growthStats: z.array(z.string()).transform(v => new Set(v)).pipe(z.set(z.enum(ZaneStatTypeGrowthValues)).min(0).max(4)).default(new Set()),
 }).describe(`Basic Class data`);
 export type ZaneStatSheetBasicClass = z.infer<typeof ZaneStatSheetBasicClassSchema>;
 
 const ZaneStatSheetAdvancedClassSchema = z.object({
-    level: z.int().min(0).max(20).default(0),
+    level: z.int().min(0).default(0),
     growthStats: z.array(z.string()).transform(v => new Set(v)).pipe(z.set(z.enum(ZaneStatTypeGrowthValues)).min(0).max(1)).default(new Set()),
 }).describe(`Basic Class data`);
 export type ZaneStatSheetAdvancedClass = z.infer<typeof ZaneStatSheetAdvancedClassSchema>;
 
 const ZaneStatSheetPromotedClassSchema = z.object({
-    level: z.int().min(0).max(20).default(0),
+    level: z.int().min(0).default(0),
     doubleGrowthStats: z.array(z.string()).transform(v => new Set(v)).pipe(z.set(z.enum(ZaneStatTypeGrowthValues)).min(0).max(2)).default(new Set()),
 }).describe(`Basic Class data`);
 export type ZaneStatSheetPromotedClass = z.infer<typeof ZaneStatSheetPromotedClassSchema>;

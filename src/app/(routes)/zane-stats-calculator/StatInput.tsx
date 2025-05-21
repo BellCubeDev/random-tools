@@ -34,8 +34,7 @@ function ZaneStatInputInternal_<TStatType extends ZaneStatType>({statNow, statNe
     const eligibleForCatchup = statEligibleForCatchup(statNow, classTier, classLevel, 'recentlyGrownPoints' in statNext ? statNext.recentlyGrownPoints : 0);
     if (customMax === undefined && classLevel !== 1 && max > min + maxNewAssignPointsForStatInALevel) max = min + maxNewAssignPointsForStatInALevel + (eligibleForCatchup ? 1 : 0);
 
-    const [bypassMax, setBypassMax] = useState(false);
-    if (bypassMax) max = Infinity;
+    if (statNext.bypassStatCaps) max = Infinity;
 
     useChangeEffect(() => {
         if (statNext.points === value) return;
@@ -45,7 +44,7 @@ function ZaneStatInputInternal_<TStatType extends ZaneStatType>({statNow, statNe
     const statNextRef = useUpdatedRef(statNext);
 
     const classTierRef = useUpdatedRef(classTier);
-    const bypassMaxRef = useUpdatedRef(bypassMax);
+    const bypassMaxRef = useUpdatedRef(statNext.bypassStatCaps);
     const setPointsNextRaw = statNext.setPointsNext;
     const setPointsNext = useCallback((newValue: number | string) => {
         const oldValue = statNextRef.current.points;
@@ -99,9 +98,10 @@ function ZaneStatInputInternal_<TStatType extends ZaneStatType>({statNow, statNe
         setPointsNext(statNext.points + pointsToAdd);
     }, [isLevelingUp]);
 
+    const setBypassStatCaps = statNext.setBypassStatCaps;
     const toggleBypassMax = useCallback(() => {
-        setBypassMax(bypass => !bypass);
-    }, []);
+        setBypassStatCaps(bypass => !bypass);
+    }, [setBypassStatCaps]);
 
     return <Flex gap='xs' align='center'>
         <NumberInput
@@ -116,11 +116,11 @@ function ZaneStatInputInternal_<TStatType extends ZaneStatType>({statNow, statNe
         />
         <Stack>
             <div style={{height:8}} />
-            {!bypassMax
-                ? <ActionIcon size='md' color='teal' onClick={toggleBypassMax}>
+            {!statNext.bypassStatCaps
+                ? <ActionIcon size='md' color='teal' onClick={toggleBypassMax} disabled={false}>
                     <IconDownload style={{rotate: '180deg'}} />
                 </ActionIcon>
-                : <ActionIcon size='md' color='red' onClick={toggleBypassMax}>
+                : <ActionIcon size='md' color='red' onClick={toggleBypassMax} disabled={false}>
                     <IconArrowUpBar />
                 </ActionIcon>}
         </Stack>

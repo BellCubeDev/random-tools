@@ -26,16 +26,16 @@ const emptyStatSheet: ZaneStatSheet = {
         promoted: null,
     },
     stats: {
-        defense: { type: ZaneStatType.DEFENSE, points: 0, growthPercentagePoints: 50, totalGrownPoints: 0, pointsToAutoAssign: 0, countGrownPointsTowardAutoAssign: false },
-        strength: { type: ZaneStatType.STRENGTH, points: 0, growthPercentagePoints: 50, totalGrownPoints: 0, pointsToAutoAssign: 0, countGrownPointsTowardAutoAssign: false },
-        luck: { type: ZaneStatType.LUCK, points: 0, growthPercentagePoints: 50, totalGrownPoints: 0, pointsToAutoAssign: 0, countGrownPointsTowardAutoAssign: false },
-        speed: { type: ZaneStatType.SPEED, points: 0, growthPercentagePoints: 50, totalGrownPoints: 0, pointsToAutoAssign: 0, countGrownPointsTowardAutoAssign: false },
-        magic: { type: ZaneStatType.MAGIC, points: 0, growthPercentagePoints: 50, totalGrownPoints: 0, pointsToAutoAssign: 0, countGrownPointsTowardAutoAssign: false },
-        mind: { type: ZaneStatType.MIND, points: 0, growthPercentagePoints: 50, totalGrownPoints: 0, pointsToAutoAssign: 0, countGrownPointsTowardAutoAssign: false },
-        resistance: { type: ZaneStatType.RESISTANCE, points: 0, growthPercentagePoints: 50, totalGrownPoints: 0, pointsToAutoAssign: 0, countGrownPointsTowardAutoAssign: false },
-        skill: { type: ZaneStatType.SKILL, points: 0, growthPercentagePoints: 50, totalGrownPoints: 0, pointsToAutoAssign: 0, countGrownPointsTowardAutoAssign: false },
-        vitality: { type: ZaneStatType.VITALITY, points: 0, growthPercentagePoints: 50, totalGrownPoints: 0, pointsToAutoAssign: 0, countGrownPointsTowardAutoAssign: false },
-        movement: { type: ZaneStatType.MOVEMENT, points: 0 },
+        defense: { type: ZaneStatType.DEFENSE, points: 0, bypassStatCaps: false, growthPercentagePoints: 50, totalGrownPoints: 0, pointsToAutoAssign: 0, countGrownPointsTowardAutoAssign: false },
+        strength: { type: ZaneStatType.STRENGTH, points: 0, bypassStatCaps: false, growthPercentagePoints: 50, totalGrownPoints: 0, pointsToAutoAssign: 0, countGrownPointsTowardAutoAssign: false },
+        luck: { type: ZaneStatType.LUCK, points: 0, bypassStatCaps: false, growthPercentagePoints: 50, totalGrownPoints: 0, pointsToAutoAssign: 0, countGrownPointsTowardAutoAssign: false },
+        speed: { type: ZaneStatType.SPEED, points: 0, bypassStatCaps: false, growthPercentagePoints: 50, totalGrownPoints: 0, pointsToAutoAssign: 0, countGrownPointsTowardAutoAssign: false },
+        magic: { type: ZaneStatType.MAGIC, points: 0, bypassStatCaps: false, growthPercentagePoints: 50, totalGrownPoints: 0, pointsToAutoAssign: 0, countGrownPointsTowardAutoAssign: false },
+        mind: { type: ZaneStatType.MIND, points: 0, bypassStatCaps: false, growthPercentagePoints: 50, totalGrownPoints: 0, pointsToAutoAssign: 0, countGrownPointsTowardAutoAssign: false },
+        resistance: { type: ZaneStatType.RESISTANCE, points: 0, bypassStatCaps: false, growthPercentagePoints: 50, totalGrownPoints: 0, pointsToAutoAssign: 0, countGrownPointsTowardAutoAssign: false },
+        skill: { type: ZaneStatType.SKILL, points: 0, bypassStatCaps: false, growthPercentagePoints: 50, totalGrownPoints: 0, pointsToAutoAssign: 0, countGrownPointsTowardAutoAssign: false },
+        vitality: { type: ZaneStatType.VITALITY, points: 0, bypassStatCaps: false, growthPercentagePoints: 50, totalGrownPoints: 0, pointsToAutoAssign: 0, countGrownPointsTowardAutoAssign: false },
+        movement: { type: ZaneStatType.MOVEMENT, points: 0, bypassStatCaps: false },
     },
 };
 
@@ -164,6 +164,8 @@ export function ZaneStatsCalculatorAfterLoader({loadedSheet, startNewCharacter, 
 
     const classLevel = classTier === ZaneClassTier.BASIC ? nextStatSheet.classData.basic.level : classTier === ZaneClassTier.ADVANCED ? nextStatSheet.classData.advanced!.level : nextStatSheet.classData.promoted!.level;
 
+    const pointAllocationZoneDisabled = levelUpStep !== LevelUpStep.POINT_ALLOCATION;
+
     return <>
         <Flex gap="md" align="baseline" mt='-1em'>
             <div>
@@ -248,7 +250,7 @@ export function ZaneStatsCalculatorAfterLoader({loadedSheet, startNewCharacter, 
                     promotedDoubleGrowthStats={nextStatSheet.classData.promoted.doubleGrowthStats}
                 />
 
-                <Fieldset legend="Point Allocation" disabled={levelUpStep !== LevelUpStep.POINT_ALLOCATION} style={{flexGrow: 1, marginTop: '-3px'}}>
+                <Fieldset legend="Point Allocation" style={{flexGrow: 1, marginTop: '-3px'}}>
                     <Flex justify='center' gap='xl'>
                         <Badge color={nextStatSheet.unallocatedPoints < 0 ? 'red' : nextStatSheet.unallocatedPoints === 0 ? 'gray' : 'blue'} size='lg' variant="outline" style={{ textTransform: 'unset' }}>
                             Unallocated Points: {nextStatSheet.unallocatedPoints}
@@ -269,6 +271,7 @@ export function ZaneStatsCalculatorAfterLoader({loadedSheet, startNewCharacter, 
                                 setUnallocatedPoints={nextStatSheet.setUnallocatedPoints}
                                 setAvailableCatchups={nextStatSheet.setAvailableCatchups}
                                 isLevelingUp={levelUpStep === LevelUpStep.POINT_ALLOCATION}
+                                disabled={pointAllocationZoneDisabled}
                             />)}
                         </Stack>
                         <Stack gap='sm'>
@@ -279,7 +282,7 @@ export function ZaneStatsCalculatorAfterLoader({loadedSheet, startNewCharacter, 
                                 classLevel={classLevel}
                                 setUnallocatedPoints={nextStatSheet.setUnallocatedPoints}
                                 setAvailableCatchups={nextStatSheet.setAvailableCatchups}
-                                disabled={!isClassingUpThisLevel}
+                                disabled={pointAllocationZoneDisabled || !isClassingUpThisLevel}
                                 customMax={6 + Math.floor(nextStatSheet.stats.speed.points / 10)}
                                 isLevelingUp={levelUpStep === LevelUpStep.POINT_ALLOCATION}
                             />
